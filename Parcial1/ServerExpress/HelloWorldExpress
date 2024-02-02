@@ -1,0 +1,14 @@
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+res.send('Constestando a Get desde ServExpress, Hola mundo!');
+});
+
+app.post("/", (req,res) =>{
+    res.send("Constentando a post desde ServExpress");
+})
+
+app.listen(3000, () => {
+console.log('Example app listening on port 3000!');
+});
