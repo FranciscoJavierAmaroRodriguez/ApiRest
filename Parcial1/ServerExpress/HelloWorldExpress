@@ -1,5 +1,15 @@
-const express = require('express');
+const express = require("express");
+const morgan = require("morgan");
 const app = express();
+
+//Funcion de middleware propia
+app.use((req,res,next)=>{
+    console.log("Peticion al server"+new Date());
+    next();
+})
+
+//Funcion de Middleware de terceros
+app.use(morgan('combined'));
 
 app.get('/', (req, res) => {
 res.send('Constestando a Get desde ServExpress, Hola mundo!');
