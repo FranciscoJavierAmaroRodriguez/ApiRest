@@ -5,6 +5,8 @@ const app = express();
 //Funcion de Middleware de terceros
 app.use(morgan('tiny'));
 app.use(express.json());
+app.use(express.text());
+app.use(express.urlencoded({extended: false}));
 
 //Recibiendo parametros en cadenas de consulta
 app.get('/alumnos', (req, res, next) => {
@@ -26,6 +28,12 @@ app.get("/administrativos", (req,res,next) =>{
     }
     res.send("Constentando a post desde ServExpress");
 })
+
+//RRecibir un formulario
+app.get("/prefectos", (req,res,next) =>{
+    console.log(req.body);
+    res.send("Contestando a Post desde ServExpress");
+});
 
 
 app.listen(3000, () => {
