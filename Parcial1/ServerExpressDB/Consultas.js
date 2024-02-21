@@ -23,22 +23,18 @@ const mysql = require("mysql2/promise");
 // })
 
 app.get("/usuario", async (req,res,next)=>{
-    let sql='';
-    if (typeof req.query.nombre =='undefined'){
-    sql ='SELECT * FROM Alumnos';}
-    else {
-    sql = `SELECT * FROM Alumnos where nombre = "${req.query.nombre}"`;}    
+    sql ='SELECT * FROM Alumnos';
+    if (typeof req.query.nombre !='undefined'){
+    sql = sql + ` where nombre = "${req.query.nombre}"`;
+    }
+
     try{
-    const connection = mysql.createConnection({
-    host: 'localhost', user:'root', database: 'APIREST', password: '130606'
-});
-var [rows,fields]=await (await connection).query(sql);
-if (rows.length > 0){
-    res.send(rows);
-}
-else{
-    res.status(404).json({Eror:"Datos no encontrados"})
-}           
+    connection =await mysql.createConnection({ host: 'localhost', user:'root', database: 'APIREST', password: '130606'});
+    var [rows,fields]=await connection.query(sql);
+    connection.end();
+    
+    (rows.length > 0) ? res.send(rows) : res.status(404).json({Eror: "Datos no encontrados"});
+
 }
 catch(err){
         res.send(err.code+` / `+err.message);
