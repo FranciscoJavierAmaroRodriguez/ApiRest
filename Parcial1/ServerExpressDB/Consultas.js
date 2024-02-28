@@ -7,8 +7,8 @@ app.use(express.json());
 //Consulta
 app.get("/usuario", async (req,res,next)=>{
     sql ='SELECT * FROM alumnos';
-    if (typeof req.query.nombre !='undefined'){
-    sql = sql + ` where nombre = "${req.query.nombre}"`;
+    if (typeof req.query.id !='undefined'){
+    sql = sql + ` where id = "${req.query.id}"`;
     }
 
     try{
@@ -28,7 +28,7 @@ catch(err){
 app.put("/usuario", async (req, res) => {
     try {
         connection = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'APIREST', password: '130606' });
-        sql =`UPDATE alumnos SET nombre ="${req.query.nombreNuevo}"` + ` where nombre = "${req.query.nombre}"`;
+        sql =`UPDATE alumnos SET id ="${req.query.idNuevo}"` + ` where id = "${req.query.id}"`;
         result= await connection.query(sql);
         await connection.end();
         if (result.affectedRows !==0) {
@@ -45,10 +45,10 @@ app.put("/usuario", async (req, res) => {
 app.post("/usuario", async (req, res) => {
     try {
         connection = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'APIREST', password: '130606' });
-        sql =`INSERT INTO alumnos (nombre) VALUES ("${req.query.nombre}")`;
+        sql =`INSERT INTO alumnos (id, nombre) VALUES ("${req.query.id}","${req.query.nombre}")`;
         var [rows,fields] = await connection.query(sql);
         await connection.end();
-        res.status(201).json({ message: "Nuevo nombre agregado correctamente" });
+        res.status(201).json({ message: "Nuevo alumno agregado correctamente" });
     } catch(err){
         res.send(err.code+` / `+err.message);
     }
@@ -58,7 +58,7 @@ app.post("/usuario", async (req, res) => {
 app.delete("/usuario", async (req, res) =>{
     try{
         connection= await mysql.createConnection({ host: 'localhost', user: 'root', database: 'APIREST', password: '130606' });
-        sql =`DELETE FROM alumnos WHERE nombre = "${req.query.nombre}"`; 
+        sql =`DELETE FROM alumnos WHERE id = "${req.query.id}"`; 
         var [rows,fields] = await connection.query(sql);
         await connection.end();
         res.status(201).json({ message: "Nombre borrado con exito"});
