@@ -1,0 +1,6 @@
+{
+  "scripts":{"doc":"jsdoc -c conf.json"},
+  "dependencies": {
+    "clean-jsdoc-theme": "^4.2.17"
+  }
+}
