@@ -2,7 +2,7 @@ const multer = require("multer");
 const express = require("express")
 
 const storage = multer.diskStorage({
-    destination: "./Parcial2/Multer/uploads/",
+    destination: "./Parcial2/ServerFormData/uploads/",
     filename: function (req, file, cb) {
       cb(null, file.originalname);
     }
