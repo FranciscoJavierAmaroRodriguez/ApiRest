@@ -4,6 +4,13 @@ const path = require('path');
 const mysql = require("mysql2/promise");
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
+const { SwaggerTheme, SwaggerThemeNameEnum } = require('swagger-themes');
+const theme = new SwaggerTheme();
+
+const options = {
+    explorer: true,
+    customCss: theme.getBuffer(SwaggerThemeNameEnum.DARK)
+  };
 
 const swaggerOptions = {
     definition: {
@@ -19,8 +26,12 @@ const swaggerOptions = {
     apis: [`${path.join(__dirname,"./Consultas.js")}`],
     };
 
-    const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs",swaggerUI.serve,swaggerUI.setup(swaggerDocs));
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs",swaggerUI.serve,swaggerUI.setup(swaggerDocs,options));
+
+app.use("/api-docs-json",(req,res)=>{
+    res.json(swaggerDocs);
+})
 
 app.use(express.json());
 

@@ -1,0 +1,27 @@
+# This file instructs Redocly's linter to ignore the rules contained for specific parts of your API.
+# See https://redoc.ly/docs/cli/ for more information.
+definicion.json:
+  info-license:
+    - '#/info'
+  no-server-example.com:
+    - '#/servers/0/url'
+  operation-operationId:
+    - '#/paths/~1usuario/get/operationId'
+    - '#/paths/~1usuario/put/operationId'
+    - '#/paths/~1usuario/post/operationId'
+    - '#/paths/~1usuario/delete/operationId'
+  operation-summary:
+    - '#/paths/~1usuario/get/summary'
+    - '#/paths/~1usuario/put/summary'
+    - '#/paths/~1usuario/post/summary'
+    - '#/paths/~1usuario/delete/summary'
+  operation-4xx-response:
+    - '#/paths/~1usuario/get/responses'
+    - '#/paths/~1usuario/put/responses'
+    - '#/paths/~1usuario/post/responses'
+    - '#/paths/~1usuario/delete/responses'
+  security-defined:
+    - '#/paths/~1usuario/get'
+    - '#/paths/~1usuario/put'
+    - '#/paths/~1usuario/post'
+    - '#/paths/~1usuario/delete'
