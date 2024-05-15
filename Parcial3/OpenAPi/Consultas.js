@@ -17,7 +17,8 @@ const swaggerOptions = {
         openapi: '3.0.0',
         info: {
             title: 'API Empleados',
-            version: '1.0.0',
+            version: '1.0.2',
+            description: 'Api que tiene una lista simple de alumnos'
     },
         servers:[
             {url: "http://localhost:3000"}
@@ -34,18 +35,40 @@ app.use("/api-docs-json",(req,res)=>{
 })
 
 app.use(express.json());
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:      
+ *       type: 
+ *         object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: 21
+ *         name: 
+ *           type: string
+ *           example: Gerardo
+ */
 
 /**
  * @swagger
- * /usuario:
- *   get:
- *     description: Welcome to swagger-jsdoc!
- *     responses:
- *       200:
- *         description: Regresa a alumnos.
+ * tags:
+ * - name: Alumnos
+ *   description: Procesos de Alumnos
+ * paths:
+ *   /lista:
+ *     get:
+ *       tags:     
+ *       - Alumnos
+ *       description: Lista de alumnos
+ *       responses:
+ *         200:
+ *           description: Regresa a alumnos.
+ *           type: json
  */
 //Consulta
-app.get("/usuario", async (req,res,next)=>{
+app.get("/lista", async (req,res,next)=>{
     sql ='SELECT * FROM alumnos';
     if (typeof req.query.id !='undefined'){
     sql = sql + ` where id = "${req.query.id}"`;
@@ -66,15 +89,23 @@ catch(err){
 
 /**
  * @swagger
- * /usuario:
+ * /actualizar:
  *   put:
- *     description: Welcome to swagger-jsdoc!
+ *     tags:    
+ *     - Alumnos
+ *     description: Actualiza el registro de alumos.
  *     responses:
  *       200:
- *         description: Actualiza el registro de alumnos.
+ *         description: Cambia el nombre de un alumno mediante el ID.
+ *         type: json
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  */
 //Update
-app.put("/usuario", async (req, res) => {
+app.put("/actualizar", async (req, res) => {
     try {
         connection = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'APIREST', password: '130606' });
         sql =`UPDATE alumnos SET id ="${req.query.idNuevo}"` + ` where id = "${req.query.id}"`;
@@ -93,21 +124,29 @@ app.put("/usuario", async (req, res) => {
 
 /**
  * @swagger
- * /usuario:
+ * /agregar:
  *   post:
- *     description: Welcome to swagger-jsdoc!
+ *     tags:    
+ *     - Alumnos
+ *     description: Añade alumnos a la base de datos
  *     responses:
  *       200:
  *         description: Registra a alumnos. El registro lleva ID y nombre
+ *         type: json
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  */
 //Añadir
-app.post("/usuario", async (req, res) => {
+app.post("/agregar", async (req, res) => {
     try {
         connection = await mysql.createConnection({ host: 'localhost', user: 'root', database: 'APIREST', password: '130606' });
         sql =`INSERT INTO alumnos (id, nombre) VALUES ("${req.query.id}","${req.query.nombre}")`;
         var [rows,fields] = await connection.query(sql);
         await connection.end();
-        res.status(201).json({ message: "Nuevo alumno agregado correctamente" });
+        res.status(201).json({ message: "Nuevo Alumno agregado correctamente" });
     } catch(err){
         res.send(err.code+` / `+err.message);
     }
@@ -116,21 +155,29 @@ app.post("/usuario", async (req, res) => {
 
 /**
  * @swagger
- * /usuario:
+ * /eliminar:
  *   delete:
- *     description: Welcome to swagger-jsdoc!
+ *     tags:    
+ *     - Alumnos
+ *     description: Elimina Alumnos en base al ID
  *     responses:
  *       200:
- *         description: Borra a alumnos.
+ *         description: Borra Alumnos.
+ *         type: json
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  */
 //Borrar
-app.delete("/usuario", async (req, res) =>{
+app.delete("/eliminar", async (req, res) =>{
     try{
         connection= await mysql.createConnection({ host: 'localhost', user: 'root', database: 'APIREST', password: '130606' });
         sql =`DELETE FROM alumnos WHERE id = "${req.query.id}"`; 
         var [rows,fields] = await connection.query(sql);
         await connection.end();
-        res.status(201).json({ message: "Nombre borrado con exito"});
+        res.status(201).json({ message: "Alumno eliminado con exito"});
     } catch(err){
         res.send(err.code+` / `+err.message);
     }
